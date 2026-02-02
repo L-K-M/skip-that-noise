@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Skip that Noise</title>
+    <style>
+        body {
+            width: 350px;
+            padding: 15px;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        #artistInput {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        #addButton {
+            padding: 8px 16px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #addButton:hover {
+            background-color: #cc0000;
+        }
+
+        #artistList {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .artist-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .artist-name {
+            font-size: 14px;
+        }
+
+        .remove-button {
+            background-color: #666;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .remove-button:hover {
+            background-color: #444;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 20px;
+        }
+
+        .info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .import-export {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .import-export h3 {
+            font-size: 13px;
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+
+        .file-input-wrapper {
+            margin-bottom: 10px;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #666;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .file-input-label:hover {
+            background-color: #555;
+        }
+
+        #exportButton {
+            padding: 8px 16px;
+            background-color: #666;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #exportButton:hover {
+            background-color: #555;
+        }
+
+        .import-status {
+            font-size: 12px;
+            margin-top: 8px;
+            padding: 6px;
+            border-radius: 4px;
+        }
+
+        .import-status.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .import-status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+<h1>Skip Artists</h1>
+<div class="input-group">
+    <input type="text" id="artistInput" placeholder="Enter artist name...">
+    <button id="addButton">Add</button>
+</div>
+<div id="artistList"></div>
+<div class="import-export">
+    <h3>Import / Export</h3>
+    <div class="file-input-wrapper">
+        <button id="openImportPageButton" class="file-input-label" type="button">Import from File</button>
+        <button id="exportButton">Export to File</button>
+    </div>
+    <div id="importStatus"></div>
+</div>
+<div class="info">
+    Songs by these artists will be automatically skipped on YouTube Music.
+</div>
+<script src="popup.js"></script>
+</body>
+</html>
