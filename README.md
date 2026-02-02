@@ -20,6 +20,8 @@ npm install --global web-ext
 
 Register on [addons.mozilla.org](https://addons.mozilla.org). Then generate API credentials from [addons.mozilla.org/en-US/developers/addon/api/key/](https://addons.mozilla.org/en-US/developers/addon/api/key/).
 
+At this point, you should also open `manifest.json` and set the `applications.gecko.id` field to a unique identifier for your extension.
+
 **3. Build the extension:**
 
 ```bash
