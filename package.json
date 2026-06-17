@@ -1,5 +1,14 @@
 {
-  "dependencies": {
-    "web-ext": "^9.2.0"
+  "name": "skip-that-noise",
+  "private": true,
+  "description": "Automatically skip songs by specific artists on YouTube Music.",
+  "scripts": {
+    "lint": "web-ext lint",
+    "build": "web-ext build",
+    "sign": "web-ext sign --channel=unlisted",
+    "start": "web-ext run"
+  },
+  "devDependencies": {
+    "web-ext": "^10.4.0"
   }
 }
