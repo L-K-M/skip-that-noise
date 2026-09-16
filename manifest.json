@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Skip that Noise",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Automatically skip songs by specific artists on YouTube Music",
   "icons": {
     "48": "icons/icon-48.png",
