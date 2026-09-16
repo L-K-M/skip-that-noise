@@ -61,7 +61,7 @@
 
     function getCurrentArtist() {
         const byline = document.querySelector('ytmusic-player-bar .byline')
-            || document.querySelector('.ytmusic-player-bar .byline');
+            || document.querySelector('.ytmusic-player-bar.byline');
 
         if (!byline) {
             return null;
