@@ -44,6 +44,22 @@
             background-color: #cc0000;
         }
 
+        #addCurrentButton {
+            width: 100%;
+            padding: 8px 16px;
+            background-color: #666;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        #addCurrentButton:hover {
+            background-color: #555;
+        }
+
         #artistList {
             max-height: 300px;
             overflow-y: auto;
@@ -142,19 +158,19 @@
             background-color: #555;
         }
 
-        .import-status {
+        .status {
             font-size: 12px;
             margin-top: 8px;
             padding: 6px;
             border-radius: 4px;
         }
 
-        .import-status.success {
+        .status.success {
             background-color: #d4edda;
             color: #155724;
         }
 
-        .import-status.error {
+        .status.error {
             background-color: #f8d7da;
             color: #721c24;
         }
@@ -166,6 +182,8 @@
     <input type="text" id="artistInput" placeholder="Enter artist name...">
     <button id="addButton">Add</button>
 </div>
+<button id="addCurrentButton" type="button">Add Current Artist</button>
+<div id="addStatus"></div>
 <div id="artistList"></div>
 <div class="import-export">
     <h3>Import / Export</h3>
