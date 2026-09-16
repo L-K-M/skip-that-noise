@@ -3,10 +3,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const artistInput = document.getElementById('artistInput');
     const addButton = document.getElementById('addButton');
+    const addCurrentButton = document.getElementById('addCurrentButton');
     const artistList = document.getElementById('artistList');
     const openImportPageButton = document.getElementById('openImportPageButton');
     const exportButton = document.getElementById('exportButton');
     const importStatus = document.getElementById('importStatus');
+    const addStatus = document.getElementById('addStatus');
 
     function loadArtists() {
         api.storage.local.get('blockedArtists').then(function (result) {
@@ -15,13 +17,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function showStatus(message, isError) {
-        importStatus.textContent = message;
-        importStatus.className = 'import-status ' + (isError ? 'error' : 'success');
-        setTimeout(function () {
-            importStatus.textContent = '';
-            importStatus.className = '';
-        }, 3000);
+    const statusTimers = new Map();
+
+    function showStatus(element, message, isError) {
+        element.textContent = message;
+        element.className = 'status ' + (isError ? 'error' : 'success');
+        clearTimeout(statusTimers.get(element));
+        statusTimers.set(element, setTimeout(function () {
+            element.textContent = '';
+            element.className = '';
+        }, 3000));
     }
 
     function exportArtists() {
@@ -29,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const artists = result.blockedArtists || [];
 
             if (artists.length === 0) {
-                showStatus('No artists to export', true);
+                showStatus(importStatus, 'No artists to export', true);
                 return;
             }
 
@@ -42,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                        filename: 'blocked-artists.txt',
                                        saveAs: true
                                    }).then(function () {
-                showStatus('Exported ' + artists.length + ' artist(s)', false);
+                showStatus(importStatus, 'Exported ' + artists.length + ' artist(s)', false);
 
                 setTimeout(function () {
                     URL.revokeObjectURL(url);
@@ -50,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }).catch(function (err) {
                 console.error('Export download failed', err);
                 URL.revokeObjectURL(url);
-                showStatus('Export failed', true);
+                showStatus(importStatus, 'Export failed', true);
             });
         });
     }
@@ -104,6 +109,50 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function addCurrentArtist() {
+        if (addCurrentButton.disabled) {
+            return;
+        }
+        addCurrentButton.disabled = true;
+
+        api.tabs.query({active: true, currentWindow: true}).then(function (tabs) {
+            const tab = tabs[0];
+            if (!tab || !tab.url || tab.url.indexOf('music.youtube.com') === -1) {
+                showStatus(addStatus, 'Open YouTube Music to add the current artist', true);
+                return null;
+            }
+            return api.tabs.sendMessage(tab.id, {type: 'getCurrentArtist'});
+        }).then(function (response) {
+            if (!response) {
+                return null;
+            }
+
+            const artist = response.artist;
+            if (!artist) {
+                showStatus(addStatus, 'No song is currently playing', true);
+                return null;
+            }
+
+            return api.storage.local.get('blockedArtists').then(function (result) {
+                const artists = result.blockedArtists || [];
+                if (artists.includes(artist)) {
+                    showStatus(addStatus, artist + ' is already in the list', true);
+                    return null;
+                }
+                artists.push(artist);
+                return api.storage.local.set({blockedArtists: artists}).then(function () {
+                    renderArtists(artists);
+                    showStatus(addStatus, 'Added ' + artist, false);
+                });
+            });
+        }).catch(function (err) {
+            console.error('addCurrentArtist failed', err);
+            showStatus(addStatus, 'Could not add the current artist. Try reloading the YouTube Music tab.', true);
+        }).finally(function () {
+            addCurrentButton.disabled = false;
+        });
+    }
+
     function removeArtist(index) {
         api.storage.local.get('blockedArtists').then(function (result) {
             const artists = result.blockedArtists || [];
@@ -115,6 +164,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     addButton.addEventListener('click', addArtist);
+
+    addCurrentButton.addEventListener('click', addCurrentArtist);
 
     artistInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {

@@ -59,6 +59,25 @@
         return null;
     }
 
+    function getCurrentArtist() {
+        const byline = document.querySelector('ytmusic-player-bar .byline')
+            || document.querySelector('.ytmusic-player-bar.byline');
+
+        if (!byline) {
+            return null;
+        }
+
+        const artistLink = byline.querySelector('a');
+        if (artistLink && artistLink.textContent.trim()) {
+            return artistLink.textContent.trim();
+        }
+
+        const text = byline.textContent.trim();
+        const separator = text.indexOf('•');
+        const artist = separator === -1 ? text : text.slice(0, separator).trim();
+        return artist || null;
+    }
+
     function clickSkipButton() {
         const skipButton = document.querySelector('.next-button');
         if (skipButton) {
@@ -132,6 +151,12 @@
 
         checkAndSkip();
     }
+
+    browser.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+        if (message && message.type === 'getCurrentArtist') {
+            sendResponse({artist: getCurrentArtist()});
+        }
+    });
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
