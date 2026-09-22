@@ -1,5 +1,8 @@
 # Skip that Noise
 
+> [!IMPORTANT]
+> LLM disclosure: This codebase was written with substantial help from large language models: AI coding agents working from the [`AGENTS.md`](AGENTS.md) brief in this repo.
+
 **Version:** [<!-- version -->0.3.0<!-- /version -->](https://github.com/L-K-M/skip-that-noise/releases/latest)
 
 A Firefox extension that automatically skips songs by specific artists on YouTube Music.
