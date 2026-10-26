@@ -18,6 +18,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      # package.json and the README License section must name the Unlicense
+      # in LICENSE, so they cannot drift from it.
+      - name: Check license statements
+        run: |
+          fail=0
+          grep -qF '"license": "Unlicense"' package.json \
+            || { echo '::error file=package.json::Set "license": "Unlicense" to match LICENSE.'; fail=1; }
+          grep -qxE '#+ License' README.md \
+            || { echo '::error file=README.md::Add a License section.'; fail=1; }
+          grep -qF '[Unlicense](LICENSE)' README.md \
+            || { echo '::error file=README.md::Name and link the Unlicense: [Unlicense](LICENSE).'; fail=1; }
+          exit "$fail"
+
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
