@@ -75,3 +75,7 @@ scripts/release.sh 1.2.3 --push     # bump manifest.json, commit, tag v1.2.3, an
 ```
 
 Pushing the `v*` tag triggers [`.github/workflows/release.yml`](.github/workflows/release.yml), which verifies the tag matches `manifest.json`, packages the extension with `web-ext` (signing through Mozilla Add-ons when the `AMO_JWT_ISSUER` / `AMO_JWT_SECRET` secrets are set, otherwise an unsigned `.zip`), and publishes a GitHub Release with auto-generated notes. Every pull request and push to `main` is linted by [`.github/workflows/ci.yml`](.github/workflows/ci.yml). The `<!-- version -->` marker near the top of this file is kept in step by the release tool. See [CICD.md](CICD.md) for the full pipeline.
+
+# License
+
+Skip that Noise's own code is released under the [Unlicense](LICENSE). The packaged add-on bundles no third-party code or assets. `web-ext` and its npm dependencies are build tools only and are not included in it.
