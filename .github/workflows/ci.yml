@@ -18,11 +18,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      # package.json and the README License section must name the Unlicense
-      # in LICENSE, so they cannot drift from it.
+      # LICENSE is the Unlicense, and package.json and the README License
+      # section must say so. If LICENSE changes, this fails until they do too.
       - name: Check license statements
         run: |
           fail=0
+          grep -qF 'This is free and unencumbered software released into the public domain' LICENSE \
+            || { echo '::error file=LICENSE::LICENSE is not the Unlicense; update package.json, README.md and this check to match it.'; fail=1; }
           grep -qF '"license": "Unlicense"' package.json \
             || { echo '::error file=package.json::Set "license": "Unlicense" to match LICENSE.'; fail=1; }
           grep -qxE '#+ License' README.md \
