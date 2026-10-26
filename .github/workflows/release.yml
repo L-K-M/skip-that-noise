@@ -55,6 +55,19 @@ jobs:
             npm run build
           fi
 
+      # The add-on bundles no third-party code, so LICENSE and the README
+      # License section are its only license files. This workflow does not
+      # wait for CI, so check that both ship in the package before publishing.
+      - name: Check license files in the package
+        run: |
+          for f in web-ext-artifacts/*; do
+            unzip -p "$f" LICENSE \
+              | grep -qF 'This is free and unencumbered software released into the public domain' \
+              || { echo "::error::$f does not contain the Unlicense LICENSE."; exit 1; }
+            unzip -p "$f" README.md | grep -qF '[Unlicense](LICENSE)' \
+              || { echo "::error::$f does not contain the README License statement."; exit 1; }
+          done
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
         with:

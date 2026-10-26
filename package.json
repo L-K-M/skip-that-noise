@@ -2,6 +2,7 @@
   "name": "skip-that-noise",
   "private": true,
   "description": "Automatically skip songs by specific artists on YouTube Music.",
+  "license": "Unlicense",
   "scripts": {
     "lint": "web-ext lint",
     "build": "web-ext build",

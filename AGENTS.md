@@ -170,3 +170,14 @@ may waive review; report that waiver rather than claiming review passed.
 
 <!-- shared-rules:end -->
 
+## Licensing
+
+- Skip that Noise's own code is Unlicense (`LICENSE`). Keep the
+  `license` field in `package.json` and the README License section
+  consistent with it; `ci.yml` checks both, and `release.yml` checks
+  that `LICENSE` and the README statement ship in the package.
+- The add-on bundles no third-party code or assets; `web-ext` and its
+  npm dependencies are build tools only. Before adding a library,
+  vendored file, font or image to the shipped files, confirm its license
+  allows redistribution. Then ship a `Third-Party-Notices.txt` in the
+  package, check it in `release.yml`, and update the README.
