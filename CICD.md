@@ -16,9 +16,10 @@ The whole pipeline is built on Mozilla's official [`web-ext`](https://extensionw
 On every pull request and every push to `main`, the workflow:
 
 1. Checks out the repository.
-2. Sets up Node.js 20 with npm caching.
-3. Installs the pinned tooling with `npm ci` (from the committed `package-lock.json`).
-4. Runs `npm run lint` → `web-ext lint`, Mozilla's linter, which validates `manifest.json` and the packaged sources, flagging manifest errors and common add-on problems. It fails the build on **errors**; warnings do not.
+2. Checks that `LICENSE` is the Unlicense and that `package.json` (`"license": "Unlicense"`) and the README License section say so.
+3. Sets up Node.js 20 with npm caching.
+4. Installs the pinned tooling with `npm ci` (from the committed `package-lock.json`).
+5. Runs `npm run lint` → `web-ext lint`, Mozilla's linter, which validates `manifest.json` and the packaged sources, flagging manifest errors and common add-on problems. It fails the build on **errors**; warnings do not.
 
 > Note: this extension is Manifest V2. `web-ext lint` is Firefox-oriented; any MV2-related deprecation warnings it surfaces are expected and do not fail the build.
 
@@ -56,7 +57,8 @@ The workflow then:
    - If the `AMO_JWT_ISSUER` / `AMO_JWT_SECRET` secrets are set, it **signs** through Mozilla Add-ons (`npm run sign`, unlisted channel) and produces an installable **signed `.xpi`**.
    - Otherwise it builds an **unsigned `.zip`** (`npm run build`).
    The artifact is version-stamped (e.g. `skip_that_noise-1.2.3.zip`) and written to `web-ext-artifacts/`.
-4. Attaches the artifact to a new GitHub Release created via [`softprops/action-gh-release`](https://github.com/softprops/action-gh-release), with auto-generated release notes.
+4. Checks that the packaged artifact contains `LICENSE` and the README License statement.
+5. Attaches the artifact to a new GitHub Release created via [`softprops/action-gh-release`](https://github.com/softprops/action-gh-release), with auto-generated release notes.
 
 An **unsigned** package is suitable for self-distribution or temporary installation. To load it in Firefox, open `about:debugging` → **This Firefox** → **Load Temporary Add-on…** and select the `.zip` (or the unzipped `manifest.json`). A **signed** `.xpi` can be installed permanently.
 
